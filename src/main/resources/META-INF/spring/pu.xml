@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    top level element of the Spring configuration. Note the multiple namespace definition for both
+    GigaSpaces and Spring. You can simply copy and paste this portion of the pu.xml file
+-->
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:os-core="http://www.openspaces.org/schema/core"
+       xmlns:os-events="http://www.openspaces.org/schema/events"
+       xmlns:os-remoting="http://www.openspaces.org/schema/remoting"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.1.xsd
+        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.1.xsd
+        http://www.openspaces.org/schema/core http://www.openspaces.org/schema/12.0/core/openspaces-core.xsd
+        http://www.openspaces.org/schema/events http://www.openspaces.org/schema/12.0/events/openspaces-events.xsd
+        http://www.openspaces.org/schema/remoting http://www.openspaces.org/schema/12.0/remoting/openspaces-remoting.xsd">
+
+    <!--
+    Spring property configurer which allows us to use system properties (such as user.name).
+    -->
+    <bean id="propertiesConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer"/>
+
+    <context:component-scan base-package="com.gigaspaces" />
+
+    <!-- Enables to configure Spring beans through annotations   -->
+    <context:annotation-config />
+
+    <!-- Enable @PostPrimary and others annotation support. -->
+    <os-core:annotation-support />
+
+    <!-- Enables using @Polling and @Notify annotations to creating polling and notify containers  -->
+    <os-events:annotation-support />
+
+    <!-- Enables using @RemotingService and other remoting related annotations   -->
+    <os-remoting:annotation-support />
+
+    <!-- Enables the usage of @GigaSpaceContext annotation based injection -->
+    <os-core:giga-space-context/>
+
+    <!--
+        A bean representing a Space. Here we configure an embedded space. Note
+        that we do not specify here the cluster topology of the Space. It is
+        declared by the os-sla:sla element of this pu.xml file.
+    -->
+    <os-core:embedded-space id="space" name="mySpace">
+        <os-core:properties>
+            <props>
+                <!-- Use ALL IN CACHE -->
+                <prop key="space-config.engine.cache_policy">1</prop>
+                <prop key="space-config.engine.memory_usage.high_watermark_percentage">97</prop>
+                <prop key="space-config.engine.memory_usage.write_only_block_percentage">96</prop>
+                <prop key="space-config.engine.memory_usage.write_only_check_percentage">95</prop>
+                <prop key="space-config.engine.memory_usage.low_watermark_percentage">94</prop>
+                <prop key="space-config.engine.memory_usage.gc-before-shortage">false</prop>
+                <prop key="cluster-config.groups.group.repl-policy.on-redo-log-capacity-exceeded">block-operations</prop>
+            </props>
+        </os-core:properties>
+    </os-core:embedded-space>
+
+    <!-- Defines a distributed transaction manager.-->
+    <os-core:distributed-tx-manager id="transactionManager" default-timeout="5000" />
+
+    <!-- Define the GigaSpace instance that the application will use to access the space  -->
+    <os-core:giga-space id="gigaSpace" space="space" tx-manager="transactionManager"/>
+
+</beans>
