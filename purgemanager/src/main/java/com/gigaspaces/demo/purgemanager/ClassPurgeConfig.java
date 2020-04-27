@@ -2,6 +2,9 @@ package com.gigaspaces.demo.purgemanager;
 
 import com.gigaspaces.demo.purgemanager.strategy.PurgeStrategy;
 
+/*
+   Stores an association of a purge strategy and the thresholds for purging.
+ */
 public class ClassPurgeConfig {
     private final int highThreshold;
     private final int lowThreshold;

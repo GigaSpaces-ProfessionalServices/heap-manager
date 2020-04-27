@@ -25,7 +25,7 @@ public class DataWithSequence {
     }
 
     @SpaceSequenceNumber
-    @SpaceIndex(type = SpaceIndexType.EXTENDED)
+    @SpaceIndex(type = SpaceIndexType.EQUAL_AND_ORDERED)
     public Long getSeqId() {
         return seqId;
     }
