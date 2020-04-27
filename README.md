@@ -2,7 +2,7 @@
 
 This is an example that demonstrates implementing a custom purge manager.
 
-The custom purge manager can be used as a replacement for (Least Recently Used) cache.
+The custom purge manager can be used as a replacement for LRU (Least Recently Used) cache.
 
 The code demonstrates 3 purge strategies. However, you can always write your own.
 
