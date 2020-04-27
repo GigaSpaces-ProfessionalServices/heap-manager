@@ -20,6 +20,10 @@ import java.util.concurrent.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+/*
+  This class will poll repeatedly to find objects available to be purged.
+  An internal map is used to associate class names with a ClassPurgeConfig, which contains the purge strategy.
+ */
 public class PurgeManager {
 
     private static final Logger logger = Logger.getLogger(PurgeManager.class.getName());
@@ -27,6 +31,7 @@ public class PurgeManager {
     private long initialDelay;
     private long pollingInterval;
 
+    // key: class name, value: classPurgeConfig instance
     private final Map<String, ClassPurgeConfig> purgeConfig = new ConcurrentHashMap<>();
     private ScheduledExecutorService scheduledExecutorService;
 
@@ -83,7 +88,7 @@ public class PurgeManager {
         }
     }
     private void initialize() {
-        // For demo purposes initialization is hard-coded, but it can
+        // For demo purposes initialization is hard-coded, but it can be coded to
         // read config from external resource (e.g. properties file, pu.xml)
         pollingInterval = 10;
         purgeConfig.put("com.gigaspaces.demo.Data", new ClassPurgeConfig(1000, 500, 5,
